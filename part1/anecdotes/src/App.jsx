@@ -15,17 +15,19 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
 
+  const maxVotes = votes.reduce(
+    (argmax, elm, i) => elm > votes[argmax] ? i : argmax
+  , 0)
+
   const setRandomAnecdotes = () => {
     const random = Math.floor(Math.random()*anecdotes.length);
     setSelected(random);
   }
 
   const addVote = () => {
-    setVotes ([
-      ...votes.slice(0, selected),
-      votes[selected]+1,
-      ...votes.slice(selected+1)
-    ])
+    const newVotes = [...votes];
+    newVotes[selected]++;
+    setVotes (newVotes)
   }
 
   return (
@@ -34,6 +36,9 @@ const App = () => {
       <p>has {votes[selected]} votes</p>
       <button onClick={addVote}>vote</button>
       <button onClick={setRandomAnecdotes}>next anecdote</button>
+    
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[maxVotes]}</p>
     </div>
   )
 }
